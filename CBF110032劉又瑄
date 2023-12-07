@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <h1>GEPT Words 單字測驗 ASP.NET 程式開發心得</h1>
+    作者：CBF110032 劉又瑄
+
+    <h2>開發思路與解決方案</h2>
+    在這裡，你可以描述你在開發過程中的思考過程，以及你如何解決問題的。
+    <h3>開發過程</h3>
+    <p>
+        <div>看完老師要求的題目後，我將<b>資料庫匯入檔案，利用下拉式清單查詢單字解釋</b>，以及<b>利用亂數產生單字測驗題目並評分</b>，並依此分為兩個部分。</div>
+    </p>
+    <p>
+        <div>
+            首先在Visual Studio建立ASP空白網站，接著建立一個Database資料庫後，我先開啟SSMS匯入XML單字資料檔案，在此之前在其他課程有修過SSMS如何匯入，所以匯入當下十分順利。<br />
+            在ASP頁面上我新增了<b></b>MultView</b>，並在裡面設置了<u>兩個view</u>，<b>一個view給查詢解釋用，另一個view是點選測驗按鈕跳轉到另一個地方測驗。</b><br />
+            先從查詢解釋頁面說起，將資料匯入資料庫後，我先設定資料表的格式跟內容以及資料繫結，並將大致需要的工具都拖移出來。<br />
+            不管是刪除訊息還是編輯刪除按鈕，有關資料表的要求大部分都做到了，但題目中要求的Sentense多行讓我思考很久該如何使用。<br />
+            我一開始嘗試的方法是將資料表欄位轉為TemplateField，並且在GridView中的編輯資料中設定多行及Width，但一直找不到想要的欄位設定，Width也不是我要的結果。
+        </div>
+    </p>
+    <p>
+        <div>
+            再來是查詢解釋，我將下拉式清單的繫結處理好後，因為題目要求<b>DropDownList顯示10個單字</b>，擷取資料方法我利用SQL查詢方法寫下
+            <b>SELECT TOP 10[word], [ch_explanation] FROM [gept_words]</b><br />
+            這樣就能在DropDownList顯示10個單字。<br />
+            再來是題目中的<b>點選DropDownList中的項目會顯示對應的中文解釋，依次記錄在下方</b>，我先<b>CBF110032_DDL1_SelectedIndexChanged方法下</b>設定兩個值存著清單值的名稱以及清單的值。<br />
+            再來就是用Literal輸出結果。超連結的部分也是利用<b>a href的方法加入</b>。<br />
+            前十頁與後十頁的按鈕是我<b>最頭疼的題目</b>，但經過不斷透過GPT輔助，終於做出來了。
+            但可惜的是判斷第一頁或最後一頁的按鈕可按或不可按還是無法解決。
+        </div>
+    </p>
+    <p>
+        <div>
+            測驗題目方面，遺憾的是我的亂數產生題目做不出來，導致後面的判斷是否正確不正確也沒能寫出來，是我<b>實力不夠還需多加練習</b>。<br />
+            單字挖空部分，我設定一個值儲存清單選取的單字<br />
+            <b>string wordWithBlanks = string.Join(" ", (firstChar + new string('_', selectedWord.Length - 1)).ToCharArray()); </b>
+            ，這是顯示<u>首字之後的每個字元都被挖空，並且每個字元之間都有空白隔開</u><br />
+            <b>CBF110032_txtBox1.Text = wordWithBlanks;</b>以及<b>CBF110032_txtBox1.ToolTip = wordWithBlanks;</b>則是底線提示有幾個字元。
+        </div>
+    </p>
+    <h3>解決策略</h3>
+    <div>
+        有關於<b>Sentense多行</b>的部分，後來我發現我並未單獨將Sentense欄位轉為<b>TemplateField</b>，設定多行及Width也並不是在GridView中的編輯資料中設定。<br />
+        後來我是在ASP原始檔中找到已經轉換為TemplateField的Sentense欄位，將那行新增了<b>TextMode="MultiLine"</b>及<b>Width="98%"</b>就顯示出題目要求的結果。<br />
+        有關於點選前十頁與後十頁按紐顯示單字的部分，則是借助<b>ChatGPT</b>的力量輔助我完成。
+    </div>
+
+
+
+
+    <h2>使用的技術與引用來源</h2>
+    在這裡，你可以列出你在開發過程中使用到的技術，以及你參考的資料來源。
+    <h3>使用的技術</h3>
+    <b>GhatGPT</b>、<b>網頁與資料庫授課教師：蕭文峰</b><b>劍橋辭典</b>
+    <h3>引用的資源</h3>
+    <p>
+        <a href="https://chat.openai.com/">GhatGPT</a><br />
+    </p>
+    <p>
+        <a href="http://einstein.nptu.edu.tw:9212/sources/ASP.NET/Programs/index.html">蕭文峰-網頁與資料庫</a>
+    </p>
+    <p>
+        <a href="https://dictionary.cambridge.org/">劍橋辭典</a>
+    </p>
+    <p>
+        <a href="https://learn.microsoft.com/zh-tw/u-sql/statements-and-expressions/order-by-and-offset-fetch-clause">
+            ORDER BY 和 OFFSET/FETCH 子句 (U-SQL)
+        </a>
+    </p>
+    <h2>遇到的問題與解決方法</h2>
+    在這裡，你可以分享你在開發過程中遇到的問題，以及你是如何解決這些問題的。
+    <h3>遇到的問題</h3>
+    <p>
+        題目中要求的<b>Sentense多行</b>讓我思考很久該如何使用。<br />
+        我一開始嘗試的方法是將資料表欄位轉為TemplateField，並且在GridView中的編輯資料中設定多行及Width，但一直找不到想要的欄位設定，Width也不是我要的結果。
+        點選前十頁與後十頁的按鈕顯示清單單字是我<b>最頭疼的題目</b>，怎麼做都做不出來。
+
+
+    </p>
+    <h3>解決的方法</h3>
+    <p>
+        有關於<b>Sentense多行</b>的部分，後來我發現我並未單獨將Sentense欄位轉為<b>TemplateField</b>，設定多行及Width也並不是在GridView中的編輯資料中設定。<br />
+        後來我是在ASP原始檔中找到已經轉換為TemplateField的Sentense欄位，將那行新增了<b>TextMode="MultiLine"</b>及<b>Width="98%"</b>就顯示出題目要求的結果。<br />
+        有關於點選前十頁與後十頁按紐顯示單字的部分，則是借助<b>ChatGPT</b>的力量輔助我完成。
+        遺憾的是我的亂數產生題目做不出來，導致後面的判斷是否正確不正確也沒能寫出來。
+    </p>
+
+    <h2>修改後的程式內容</h2>
+    在這裡，你可以分享你修改後的程式碼，並解釋你做了哪些改變。
+    <h3>修改的部分</h3>
+    <p>
+        <div>
+            <img src="codepic/PrevuousButtonCode.png" /><br />
+            <img src="codepic/NextButtonCode.png" /><br />
+            <img src="codepic/LoadData method.png" /><br />
+            <img src="codepic/delete.png" /><br />
+        </div>
+    </p>
+    <p>
+        <div>
+            <img src="codepic/sentense.png" />
+        </div>
+    </p>
+    <h3>程式碼說明</h3>
+    <p>前面四張為GPT輔助完成的換頁十個單字按紐。</p>
+    <p>
+        最後一張為在原始檔的程式碼。<br />
+        在ASP原始檔中找到已經轉換為TemplateField的Sentense欄位，將那行新增了<b>TextMode="MultiLine"</b>及<b>Width="98%"</b>就顯示出題目要求的結果。<br />
+    </p>
+
+    <h2>程式執行畫面</h2>
+    在這裡，你可以分享你的程式執行畫面，並解釋每個畫面的功能。
+    <h3>功能介紹</h3>
+    <p><b>第一張為查詢中文解釋的頁面，第二張為選取下拉式清單的單字就能顯示其中文解釋</b></p>
+    <br />
+    <p><b>第三張為查詢中文解釋結果，可點選前往該單字查詢的字典頁面。</b></p>
+    <br />
+    <p><b>最後一張為測驗頁面，測驗題目為最近在DropDownList中呈現的單字，題目會呈現中文解釋及英文首字元及底線提示有幾個字元。</b></p>
+    <br />
+    <h3>畫面展示</h3>
+    <p>
+        <img src="codepic/examscreen1.png" /><br />
+        <b>此為資料表及下拉式清單。</b>
+        <img src="codepic/EnglishandChinese.png" /><br />
+        <b>此為中文解釋以及前十個單字、後十個單字的部分。</b>
+    </p>
+    <br />
+    <p>
+        <img src="codepic/EnglishandChinesedone.png" /><br />
+        <b>此為查詢結果，含有超連結，可點選前往該單字查詢的字典頁面。</b>
+    </p>
+    <br />
+    <p>
+        <img src="codepic/exam.png" /><br />
+        <b>此為測驗頁面，測驗題目為最近在DropDownList中呈現的單字。題目會呈現中文解釋及英文首字元及底線提示有幾個字元。</b>
+    </p>
+
+    <h2>個人心得與反思</h2>
+    在這裡，你可以分享你對於這次開發經驗的感想，以及你從中學到了什麼。
+    <h3>學習心得</h3>
+    我認知到自己對程式還有很多不足的地方，我對寫程式的自信也大不如從前。<br />
+    即便是這樣，我在開發英文單字測驗這個程式時也感受到一些小小的成就感。<br />
+    從幾次的作業到現在，原本不會、沒寫程式碼的地方，到現在這個測驗已經慢慢補足前幾次沒寫的部分，多少還是感受到一些快樂。
+    <h3>未來展望</h3>
+    期望自己的code能夠越寫越進步，也想發揮在自己有興趣的領域上。
+</body>
+</html>
